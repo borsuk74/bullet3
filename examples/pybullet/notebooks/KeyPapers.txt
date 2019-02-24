@@ -1,0 +1,28 @@
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.141.7985&rep=rep1&type=pdf
+https://arxiv.org/pdf/1710.04615.pdf
+http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
+http://buildingparser.stanford.edu/images/2D-3D-S_2017.pdf
+http://ce.eng.usc.ac.ir/files/1511334027376.pdf
+https://doc.lagout.org/programmation/OpenGL/Learning%20Game%20Physics%20with%20Bullet%20Physics%20and%20OpenGL%20%5BDickinson%202013-10-25%5D.pdf
+Robotic soft body peg-hole insertion using deep reinforcement learning:
+https://lib.ugent.be/fulltxt/RUG01/002/494/599/RUG01-002494599_2018_0001_AC.pdf
+GibsonEnv: Real-WorldPerceptionforEmbodiedAgents
+
+https://arxiv.org/pdf/1808.10654.pdf
+An Algorithmic Perspective on Imitation Learning
+
+https://arxiv.org/ftp/arxiv/papers/1811/1811.06711.pdf
+A Survey of Deep Network Solutions for Learning Control in Robotics: From Reinforcement to Imitation 
+https://arxiv.org/pdf/1612.07139.pdf
+RobotLearningfromHumanDemonstrationinVirtualReality
+file:///C:/Users/aleks/AppData/Local/Packages/Microsoft.MicrosoftEdge_8wekyb3d8bbwe/TempState/Downloads/stramandinoliEtAl_abstract_vam4hri_18%20(1).pdf
+Supplement ?le of VR-Goggles for Robots: Real-to-sim Domain Adaptation for Visual Control
+
+https://ram-lab.com/file/tailei/vr_goggles/supplement.pdf
+https://arxiv.org/pdf/1802.00265.pdf
+https://arxiv.org/pdf/1711.03213.pdf
+https://arxiv.org/pdf/1703.10593.pdf
+
+
+
+
