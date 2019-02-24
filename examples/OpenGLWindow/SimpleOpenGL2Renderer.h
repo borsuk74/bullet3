@@ -47,6 +47,9 @@ public:
 	}
 
 	virtual void renderScene();
+#ifdef GETCAMERA_OL_VR_NEEDS
+	virtual void renderSceneInBuffer(unsigned int renderBufferId);
+#endif  //GETCAMERA_OL_VR_NEEDS
 
 	virtual int getScreenWidth();
 	virtual int getScreenHeight();

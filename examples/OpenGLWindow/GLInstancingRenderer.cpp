@@ -1611,6 +1611,64 @@ void GLInstancingRenderer::renderScene()
 	}
 }
 
+#ifdef GETCAMERA_OL_VR_NEEDS
+void GLInstancingRenderer::renderSceneInBuffer(unsigned int renderBufferId)
+{
+//avoid some Intel driver on a Macbook Pro to lock-up
+	//todo: figure out what is going on on that machine
+
+	//glFlush();
+	unsigned int oldFrameBufferId = getRenderFrameBuffer();
+	setRenderFrameBuffer((unsigned int)renderBufferId);
+	if (m_data->m_useProjectiveTexture)
+	{
+		renderSceneInternal(B3_USE_PROJECTIVE_TEXTURE_RENDERMODE);
+	}
+	else
+	{
+		if (useShadowMap)
+		{
+			renderSceneInternal(B3_CREATE_SHADOWMAP_RENDERMODE);
+
+			if (m_planeReflectionShapeIndex >= 0)
+			{
+				/* Don't update color or depth. */
+				glDisable(GL_DEPTH_TEST);
+				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+				/* Draw 1 into the stencil buffer. */
+				glEnable(GL_STENCIL_TEST);
+				glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+				glStencilFunc(GL_ALWAYS, 1, 0xffffffff);
+
+				/* Now render floor; floor pixels just get their stencil set to 1. */
+				renderSceneInternal(B3_USE_SHADOWMAP_RENDERMODE_REFLECTION_PLANE);
+
+				/* Re-enable update of color and depth. */
+				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+				glEnable(GL_DEPTH_TEST);
+
+				/* Now, only render where stencil is set to 1. */
+				glStencilFunc(GL_EQUAL, 1, 0xffffffff); /* draw if ==1 */
+				glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+				//draw the reflection objects
+				renderSceneInternal(B3_USE_SHADOWMAP_RENDERMODE_REFLECTION);
+
+				glDisable(GL_STENCIL_TEST);
+			}
+
+			renderSceneInternal(B3_USE_SHADOWMAP_RENDERMODE);
+		}
+		else
+		{
+			renderSceneInternal();
+		}
+	}
+	setRenderFrameBuffer(oldFrameBufferId);
+}	
+#endif  //GETCAMERA_OL_VR_NEEDS
+
 struct PointerCaster
 {
 	union {
@@ -2682,10 +2740,17 @@ void GLInstancingRenderer::setRenderFrameBuffer(unsigned int renderFrameBuffer)
 {
 	m_data->m_renderFrameBuffer = (GLuint)renderFrameBuffer;
 }
-
+#ifdef GETCAMERA_OL_VR_NEEDS
+unsigned int GLInstancingRenderer::getRenderFrameBuffer()
+{
+ return (unsigned int)(m_data->m_renderFrameBuffer);
+}	
+#endif  //GETCAMERA_OL_VR_NEEDS
 int GLInstancingRenderer::getTotalNumInstances() const
 {
 	return m_data->m_totalNumInstances;
 }
+
+
 
 #endif  //NO_OPENGL3

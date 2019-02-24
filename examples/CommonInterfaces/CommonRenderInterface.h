@@ -53,6 +53,9 @@ struct CommonRenderInterface
 	virtual void setProjectiveTexture(bool useProjectiveTexture){};
 
 	virtual void renderScene() = 0;
+#ifdef GETCAMERA_OL_VR_NEEDS
+	virtual void renderSceneInBuffer(unsigned int renderBufferId) = 0;
+#endif  //GETCAMERA_OL_VR_NEEDS
 	virtual void renderSceneInternal(int renderMode = B3_DEFAULT_RENDERMODE){};
 	virtual int getScreenWidth() = 0;
 	virtual int getScreenHeight() = 0;

@@ -1099,7 +1099,13 @@ void OpenGLGuiHelper::copyCameraImageData(const float viewMatrix[16], const floa
 			getRenderInterface()->getActiveCamera()->setVRCamera(viewMatrix, projectionMatrix);
 			{
 				BT_PROFILE("renderScene");
+				
+#ifdef GETCAMERA_OL_VR_NEEDS
+				getRenderInterface()->renderSceneInBuffer(0);
+#else
 				getRenderInterface()->renderScene();
+#endif  //GETCAMERA_OL_VR_NEEDS
+
 			}
 
 			{

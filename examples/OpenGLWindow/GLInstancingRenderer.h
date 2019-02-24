@@ -46,6 +46,9 @@ public:
 	virtual void init();
 
 	virtual void renderScene();
+#ifdef GETCAMERA_OL_VR_NEEDS
+	virtual void renderSceneInBuffer(unsigned int renderBufferId);
+#endif  //GETCAMERA_OL_VR_NEEDS
 	virtual void renderSceneInternal(int orgRenderMode = B3_DEFAULT_RENDERMODE);
 
 	void InitShaders();
@@ -147,6 +150,9 @@ public:
 	virtual void clearZBuffer();
 
 	virtual void setRenderFrameBuffer(unsigned int renderFrameBuffer);
+#ifdef GETCAMERA_OL_VR_NEEDS
+	 virtual unsigned int getRenderFrameBuffer();
+#endif  //GETCAMERA_OL_VR_NEEDS
 };
 
 #endif  //GL_INSTANCING_RENDERER_H

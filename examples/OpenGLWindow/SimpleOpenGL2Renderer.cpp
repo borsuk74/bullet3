@@ -380,6 +380,10 @@ void SimpleOpenGL2Renderer::renderScene()
 	drawSceneInternal(0, 0);
 }
 
+#ifdef GETCAMERA_OL_VR_NEEDS
+void SimpleOpenGL2Renderer::renderSceneInBuffer(unsigned int renderBufferId)
+{}
+#endif  //GETCAMERA_OL_VR_NEEDS
 int SimpleOpenGL2Renderer::registerTexture(const unsigned char* texels, int width, int height, bool flipTexelsY)
 {
 	b3Assert(glGetError() == GL_NO_ERROR);
