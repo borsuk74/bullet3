@@ -1,7 +1,7 @@
 import cv2
 #import cv_bridge
 import numpy as np
-import rospy
+
 import snappy
 import struct
 
@@ -78,7 +78,7 @@ class DepthRecorder(object):
 
 
 
-    def _add_image(self, ts, img):
+    def add_image(self, ts, img):
         """ Add depth image to archive """
 
         # write time stamp to file
@@ -105,7 +105,7 @@ class DepthRecorder(object):
                 # as provided by the libfreenect2 library and Kinect SDK.
                 img *= 1000.0
                 img = img.astype(np.uint16, copy=False)
-        assert img.dtype == np.uint16
+                assert img.dtype == np.uint16
 
         # compress image with snappy
         img_comp = snappy.compress(img)
