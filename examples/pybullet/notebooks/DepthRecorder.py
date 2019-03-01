@@ -77,7 +77,8 @@ class DepthRecorder(object):
         return not (self._fp_d.closed and self._fp_ts.closed)
 
 
-
+    # img is obtained by conversion np.array(img_arr[3]), dtype = np.float64
+    #where img_arr is atuple, output from the call to getCameraImage(...)
     def add_image(self, ts, img):
         """ Add depth image to archive """
 
@@ -85,27 +86,23 @@ class DepthRecorder(object):
         self._fp_ts.write('%f\n' % ts)
         self._fp_ts.flush()
         # add frame to binary file
-        #try:
-        #    img = cv_bridge.CvBridge().imgmsg_to_cv2(imgmsg)
-        #except cv_bridge.CvBridgeError as e:
-        #    rospy.logfatal("'%s' Failed to convert ROS image message!" % self)
-        #    raise e
-        if img.dtype == np.float32:
+
+        #if img.dtype == np.float32:
             # Is simulated data
-            mask = np.isnan(img)
-            if mask.any():
+            #mask = np.isnan(img)
+            #if mask.any():
                 # In simulation, the background has NaN depth values.
                 # We replace them with 0 m, similar to what the Kinect V1 did.
                 # See https://msdn.microsoft.com/en-us/library/jj131028.aspx.
                 #rospy.logdebug("There was at least one NaN in the depth image. " +
                 #              "I replaced all occurrences with 0.0 m.")
-                img.flags.writeable = True
-                img[mask] = 0.0
+                #img.flags.writeable = True
+                #img[mask] = 0.0
                 # We now map the float values in meters to uint16 values in mm
                 # as provided by the libfreenect2 library and Kinect SDK.
-                img *= 1000.0
-                img = img.astype(np.uint16, copy=False)
-                assert img.dtype == np.uint16
+                #img *= 1000.0
+                #img = img.astype(np.uint16, copy=False)
+                #assert img.dtype == np.uint16
 
         # compress image with snappy
         img_comp = snappy.compress(img)
@@ -116,7 +113,19 @@ class DepthRecorder(object):
         self._fp_d.write(img_comp)
         self._fp_d.flush()
 
-    def depth_from_binary(binary_name, imgsize=(240, 320)):
+    #imgsize is not used so far
+    #to process returned array of images, need to use:
+    #for i in range(0, len(images), 1):
+        #depth_buffer_opengl = np.reshape(images[i, :], [120, 120])
+        # print(len(depth_buffer_opengl))
+        #depth_opengl = farPlane * nearPlane / (farPlane - (farPlane - nearPlane) * depth_buffer_opengl)
+        #image_depth = plt.imshow(depth_opengl, interpolation='none', animated=True, label="blah")
+        #image_depth.set_data(depth_opengl)
+        #ax.plot([0])
+
+        # plt.draw()
+        #plt.show()
+    def depth_from_binary(self, binary_name, imgsize=(120, 120)):
         """ Decode binary file containing depth images and return the depth
         images as a numpy ndarray.
         :param binary_name: The file name of the binary file to read.
@@ -126,25 +135,25 @@ class DepthRecorder(object):
         images = list()
         with open(binary_name, 'rb') as fp:
             b = fp.read(4)
-            while b != '':
+            while (len(b)>=4):
                 k = struct.unpack('<L', b)[0]
                 image_bytes = fp.read(k)
                 images.append(snappy.uncompress(image_bytes))
                 b = fp.read(4)
         l = len(images)
         images = np.array(images)
-        images = np.fromstring(images, dtype=np.dtype('>u2'))
-        return images.reshape((l,) + imgsize)
+        images = np.frombuffer(images, dtype=np.float64)
+        return images.reshape((l,) + (-1,))
 
 
 
 #for testing of the compress/decompress functionality
 if __name__ == '__main__':
     import cv2
-
+    import matplotlib.pyplot as plt
     # fn = '/home/baxter/Downloads/DepthSenseDepthLog2015-12-17 13.13.19.647.bin'
     fn = '/home/baxter/ros_ws/src/baxter_data_acquisition/data/201603221452-0_kinect_depth_depth.bin'
-
+    
     imgs = depth_from_binary(fn, (424, 512))
 
     for i in range(imgs.shape[0]):
