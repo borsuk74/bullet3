@@ -78,6 +78,7 @@ class DepthRecorder(object):
 
 
     # img is obtained by conversion np.array(img_arr[3]), dtype = np.float64
+    #and depth_opengl = far * near / (far - (far - near) * depth_opengl) to convert into meters
     #where img_arr is atuple, output from the call to getCameraImage(...)
     def add_image(self, ts, img):
         """ Add depth image to archive """
