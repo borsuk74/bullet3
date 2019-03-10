@@ -77,3 +77,52 @@ class CameraRecorder(object):
         except Exception as e:
             raise e
 
+
+    def getArrayFromVideo(self, file):
+        capture = cv2.CaptureFromFile(file)
+
+        frames = []
+
+        for i in range(100):
+            img = cv.QueryFrame(capture)
+
+            tmp = cv.CreateImage(cv.GetSize(img), 8, 3)
+
+            cv.CvtColor(img, tmp, cv.CV_BGR2RGB)
+
+            frames.append(asarray(cv.GetMat(tmp)))
+
+        frames = array(frames)
+        return frames
+
+    def getArrayFromVideo1(self, file):
+        import os
+
+        import scipy.io.wavfile as wav
+
+        # install lame
+
+        # install bleeding edge scipy (needs new cython)
+
+        #fname = 'XC135672-Red-winged\ Blackbird1301.mp3'
+
+        oname = 'temp.wav'
+
+        cmd = 'lame --decode {0} {1}'.format(file, oname)
+
+        os.system(cmd)
+
+        data = wav.read(oname)
+
+        # your code goes here
+
+        #print(len(data[1]))
+        return data
+
+        #this one should be tested
+    def getArrayFromVideo2(self, file):
+        import skvideo.io
+        video_data = skvideo.io.vread(file)
+        print(video_data.shape)
+        return video_data
+
